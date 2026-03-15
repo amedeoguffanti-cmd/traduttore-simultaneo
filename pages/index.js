@@ -26,7 +26,28 @@ const VOICES = [
   { id: 'onwK4e9ZLuTAKqWW03F9', label: 'Daniel — britannico, chiaro' }
 ]
 
+const SITE_PASSWORD = 'Roberto2026!'
+
 export default function Home() {
+  const [authed, setAuthed] = useState(false)
+  const [pw, setPw] = useState('')
+  const [pwError, setPwError] = useState(false)
+
+  const checkPw = (e) => {
+    e.preventDefault()
+    if (pw === SITE_PASSWORD) {
+      setAuthed(true)
+      sessionStorage.setItem('authed', '1')
+    } else {
+      setPwError(true)
+      setTimeout(() => setPwError(false), 1500)
+    }
+  }
+
+  useEffect(() => {
+    if (sessionStorage.getItem('authed') === '1') setAuthed(true)
+  }, [])
+
   const [anthropicKey, setAnthropicKey]   = useState('')
   const [elevenKey,    setElevenKey]       = useState('')
   const [sourceLang,   setSourceLang]      = useState('it')
@@ -193,6 +214,32 @@ export default function Home() {
     setTargetLang(code)
     setTranslatedText('')
   }
+
+  if (!authed) return (
+    <>
+      <Head>
+        <title>Traduttore Simultaneo — Accesso</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <div className={styles.page}>
+        <div className={styles.container} style={{ marginTop: '20vh' }}>
+          <div className={styles.header}>
+            <h1>Traduttore Simultaneo</h1>
+            <p>Inserisci la password per accedere</p>
+          </div>
+          <div className={styles.card}>
+            <form onSubmit={checkPw} style={{ display: 'flex', gap: 10 }}>
+              <input className={styles.apiInput} type="password" placeholder="Password..."
+                value={pw} onChange={e => setPw(e.target.value)} autoFocus
+                style={{ flex: 1, borderColor: pwError ? '#b83232' : undefined }} />
+              <button className={styles.btn} type="submit">Entra</button>
+            </form>
+            {pwError && <p style={{ color: '#b83232', fontSize: 13, marginTop: 8 }}>Password errata</p>}
+          </div>
+        </div>
+      </div>
+    </>
+  )
 
   return (
     <>
