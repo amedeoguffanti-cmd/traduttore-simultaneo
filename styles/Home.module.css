@@ -1,3 +1,5 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 .page {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
   background: #f0ede8;
@@ -48,9 +50,15 @@
 }
 .apiInput:focus { border-color: #999; }
 
-.langRow { display: flex; gap: 10px; margin-bottom: 12px; }
+.langRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .langBtn {
   flex: 1;
+  min-width: 120px;
   padding: 11px;
   border-radius: 9px;
   border: 1.5px solid rgba(0,0,0,0.14);
@@ -105,7 +113,6 @@
 .btn:hover:not(:disabled) { background: #f7f5f2; }
 .btn:active:not(:disabled) { transform: scale(0.98); }
 .btn:disabled { opacity: 0.3; cursor: default; }
-
 .btnPrimary { flex: 1; font-size: 15px; }
 .btnPrimary.rec {
   background: #fdf1f1;
@@ -146,14 +153,15 @@
 .historyList { max-height: 240px; overflow-y: auto; }
 .historyItem { padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.07); }
 .historyItem:last-child { border-bottom: none; }
-.hIt { font-size: 12px; color: #888; margin-bottom: 3px; }
-.hTr { font-size: 14px; color: #1c1c1c; }
+.hSrc { font-size: 12px; color: #888; margin-bottom: 3px; }
+.hTgt { font-size: 14px; color: #1c1c1c; }
 .hReplay {
   font-size: 11px;
   color: #2554a0;
   cursor: pointer;
   float: right;
   text-decoration: underline;
+  margin-left: 8px;
 }
 
 .tip { text-align: center; font-size: 12px; color: #aaa; margin-top: 10px; line-height: 1.6; }
@@ -162,4 +170,5 @@
 @media (max-width: 520px) {
   .panels  { grid-template-columns: 1fr; }
   .apiRow  { grid-template-columns: 1fr; }
+  .langBtn { min-width: 80px; font-size: 13px; }
 }
