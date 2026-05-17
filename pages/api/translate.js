@@ -2,16 +2,22 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
 
   const { text, sourceLang, targetLang, anthropicKey } = req.body
-  if (!text || !targetLang) return res.status(400).json({ error: 'Missing text or targetLang' })
+  if (!text || !targetLang) return res.status(400).json({ error: 'Missing params' })
 
   const apiKey = process.env.ANTHROPIC_API_KEY || anthropicKey
   if (!apiKey) return res.status(400).json({ error: 'Missing Anthropic API key' })
 
-  const langNames = { it: 'Italian', en: 'English', tr: 'Turkish' }
-  const src = langNames[sourceLang] || 'Italian'
-  const tgt = langNames[targetLang] || 'English'
+  const langNames = {
+    it: 'italiano',
+    tr: 'turco moderno e naturale',
+    en: 'inglese britannico naturale e fluente',
+    sq: 'albanese (shqip) moderno e naturale'
+  }
 
-  const systemPrompt = `You are a professional simultaneous interpreter specializing in corporate training and everyday conversation. Translate the ${src} text into natural, fluent ${tgt}. Keep the original tone — whether formal, casual, or instructional. Reply ONLY with the translation, no other text.`
+  const srcName = langNames[sourceLang] || 'italiano'
+  const tgtName = langNames[targetLang] || langNames.en
+
+  const systemPrompt = `Sei un interprete simultaneo professionista specializzato in corsi aziendali e formativi. Traduci il testo ${srcName} in ${tgtName}. Mantieni il tono formativo ma accessibile e naturale. Rispondi SOLO con la traduzione, senza spiegazioni o altro testo.`
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
